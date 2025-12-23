@@ -4,7 +4,7 @@ Jump to next/previous LSP reference in the current buffer for the item under the
 
 If you have [demicolon.nvim](https://github.com/mawkler/demicolon.nvim) installed you can also repeat jumps with `;`/`,`. See the [Demicolon section](#demicolon) for more information.
 
-https://github.com/user-attachments/assets/7109c1bc-1664-46eb-b16a-fa65c4f05f74
+<https://github.com/user-attachments/assets/7109c1bc-1664-46eb-b16a-fa65c4f05f74>
 
 ## Installation
 
@@ -53,7 +53,7 @@ opts = {
 
 ### Highlights
 
-Refjump highlights the references by default. It uses the highlight group `RefjumpReferences`. To change the highlight, see `:help nvim_set_hl()`.
+Refjump highlights the references by default. It uses the highlight group `RefjumpReference`. To change the highlight, see `:help nvim_set_hl()`.
 
 ## Integrations
 
