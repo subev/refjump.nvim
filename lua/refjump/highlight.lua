@@ -62,4 +62,16 @@ function M.auto_clear_reference_highlights()
   })
 end
 
+function M.clear_on_escape()
+  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+  local ctrl_c = vim.api.nvim_replace_termcodes('<C-c>', true, false, true)
+
+  vim.on_key(function(key)
+    -- Listen for escape or ctrl-c without blocking them
+    if key == esc or key == ctrl_c then
+      M.disable()
+    end
+  end, vim.api.nvim_create_namespace('refjump_escape_listener'))
+end
+
 return M

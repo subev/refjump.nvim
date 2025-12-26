@@ -8,6 +8,7 @@ local M = {}
 ---@class RefjumpHighlightOptions
 ---@field enable? boolean Highlight the LSP references on jump
 ---@field auto_clear boolean Automatically clear highlights when cursor moves
+---@field clear_on_escape? boolean Listen for escape key to clear highlights (non-intrusive)
 
 ---@class RefjumpIntegrationOptions
 ---@field demicolon? { enable?: boolean } Make `]r`/`[r` repeatable with `;`/`,` using demicolon.nvim
@@ -26,6 +27,7 @@ local options = {
   highlights = {
     enable = true,
     auto_clear = true,
+    clear_on_escape = false,
   },
   integrations = {
     demicolon = {
@@ -53,6 +55,10 @@ function M.setup(opts)
 
     if options.highlights.auto_clear then
       require('refjump.highlight').auto_clear_reference_highlights()
+    end
+
+    if options.highlights.clear_on_escape then
+      require('refjump.highlight').clear_on_escape()
     end
   end
 end
