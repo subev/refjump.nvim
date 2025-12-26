@@ -51,6 +51,7 @@ end
 function M.disable()
   if not highlight_references then
     vim.api.nvim_buf_clear_namespace(0, highlight_namespace, 0, -1)
+    require('refjump.counter').clear(0)
   else
     highlight_references = false
   end
