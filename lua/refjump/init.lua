@@ -22,6 +22,7 @@ local M = {}
 ---@field highlights? RefjumpHighlightOptions
 ---@field counter? RefjumpCounterOptions
 ---@field integrations? RefjumpIntegrationOptions
+---@field loop? boolean Loop back to first/last reference when reaching the end
 ---@field verbose? boolean Print message if no reference is found
 local options = {
   keymaps = {
@@ -43,6 +44,7 @@ local options = {
       enable = true,
     },
   },
+  loop = true,
   verbose = true,
 }
 

@@ -81,9 +81,17 @@ end
 ---@param forward boolean
 ---@param references RefjumpReference[]
 local function jump_to_next_reference(next_reference, forward, references)
-  -- If no reference is found, loop around
+  local options = require('refjump').get_options()
+  
+  -- If no reference is found
   if not next_reference then
-    next_reference = forward and references[1] or references[#references]
+    if options.loop then
+      -- Loop around to first/last reference
+      next_reference = forward and references[1] or references[#references]
+    else
+      -- No-op: silently return without jumping
+      return
+    end
   end
 
   if next_reference then

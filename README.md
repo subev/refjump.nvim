@@ -47,6 +47,7 @@ opts = {
       enable = true, -- Make `]r`/`[r` repeatable with `;`/`,` using demicolon.nvim
     },
   },
+  loop = true, -- Loop back to first/last reference when reaching the end
   verbose = true, -- Print message if no reference is found
 }
 ```
