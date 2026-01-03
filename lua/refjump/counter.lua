@@ -6,18 +6,12 @@ local counter_namespace = vim.api.nvim_create_namespace('RefjumpCounter')
 ---Name of the highlight group for the counter
 local counter_hl_name = 'RefjumpCounter'
 
----Create fallback highlight group if it doesn't exist
-function M.create_fallback_hl_group(fallback_hl)
+---Create highlight group linked to WarningMsg if it doesn't exist
+function M.create_hl_group()
   local hl = vim.api.nvim_get_hl(0, { name = counter_hl_name })
 
   if vim.tbl_isempty(hl) then
-    -- Create a distinctive highlight: yellow/orange text on dark background
-    -- with bold for extra visibility
-    vim.api.nvim_set_hl(0, counter_hl_name, {
-      fg = '#FFA500', -- Orange/yellow color
-      bold = true,
-      default = true,
-    })
+    vim.api.nvim_set_hl(0, counter_hl_name, { link = 'WarningMsg' })
   end
 end
 
@@ -26,10 +20,6 @@ end
 ---@param total_count integer Total number of references
 ---@param bufnr integer Buffer number
 function M.show(current_index, total_count, bufnr)
-  if not require('refjump').get_options().counter.enable then
-    return
-  end
-
   -- Get current cursor position
   local cursor = vim.api.nvim_win_get_cursor(0)
   local line = cursor[1] - 1 -- Convert to 0-indexed

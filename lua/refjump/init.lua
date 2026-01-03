@@ -11,7 +11,6 @@ local M = {}
 
 ---@class RefjumpCounterOptions
 ---@field enable? boolean Show virtual text counter at end of line
----@field hl_group? string Highlight group for counter text
 
 ---@class RefjumpIntegrationOptions
 ---@field demicolon? { enable?: boolean } Make `]r`/`[r` repeatable with `;`/`,` using demicolon.nvim
@@ -34,7 +33,6 @@ local options = {
   },
   counter = {
     enable = true,
-    hl_group = 'WarningMsg',
   },
   integrations = {
     demicolon = {
@@ -66,10 +64,15 @@ function M.setup(opts)
   end
 
   if options.counter.enable then
-    require('refjump.counter').create_fallback_hl_group(options.counter.hl_group)
+    require('refjump.counter').create_hl_group()
   end
 end
 
 M.reference_jump = require('refjump.jump').reference_jump
+
+---Get info about current reference position (for statusline use)
+---@param bufnr? integer Buffer number (defaults to current buffer)
+---@return { index: integer|nil, total: integer }
+M.get_reference_info = require('refjump.state').get_reference_info
 
 return M

@@ -1,8 +1,5 @@
 local M = {}
 
----Used to keep track of if LSP reference highlights should be enabled
-local highlight_references = false
-
 local highlight_namespace = vim.api.nvim_create_namespace('RefjumpReferenceHighlights')
 
 local reference_hl_name = 'RefjumpReference'
@@ -37,8 +34,6 @@ function M.enable(references, bufnr)
       { inclusive = false }
     )
   end
-
-  highlight_references = true
 end
 
 ---@deprecated Use `disable()` instead
@@ -49,11 +44,13 @@ function M.disable_reference_highlights()
 end
 
 function M.disable()
-  if not highlight_references then
+  local state = require('refjump.state')
+  if not state.is_active() then
     vim.api.nvim_buf_clear_namespace(0, highlight_namespace, 0, -1)
     require('refjump.counter').clear(0)
+    state.clear()
   else
-    highlight_references = false
+    state.clear()
   end
 end
 
