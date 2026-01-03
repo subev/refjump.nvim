@@ -33,13 +33,10 @@ function M.get_reference_info(bufnr)
   }
 end
 
----Check if reference navigation is currently active for a buffer
----@param bufnr? integer Buffer number (defaults to current buffer)
+---Check if reference navigation is currently active
 ---@return boolean
-function M.is_active(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local state = get_buffer_state(bufnr)
-  return state.current_index ~= nil and #state.references > 0
+function M.is_active()
+  return require('refjump.highlight').is_active()
 end
 
 ---Update state after jumping to a reference (internal use)

@@ -1,4 +1,5 @@
 local state = require('refjump.state')
+local highlight = require('refjump.highlight')
 
 describe('refjump.state', function()
   local bufnr
@@ -53,31 +54,34 @@ describe('refjump.state', function()
 
   describe('is_active', function()
     it('returns false initially', function()
-      assert.is_false(state.is_active(bufnr))
+      assert.is_false(state.is_active())
     end)
 
-    it('returns true after set() with valid data', function()
+    it('returns true when highlights are enabled', function()
       local refs = {
         { range = { start = { line = 0, character = 0 }, ['end'] = { line = 0, character = 5 } } },
       }
-      state.set(refs, 1, bufnr)
+      -- Enable highlights to make is_active() return true
+      highlight.enable(refs, bufnr)
 
-      assert.is_true(state.is_active(bufnr))
+      assert.is_true(state.is_active())
+
+      -- Cleanup: disable highlights (need to call twice due to toggle behavior)
+      highlight.disable()
+      highlight.disable()
     end)
 
-    it('returns false when index is nil', function()
+    it('returns false after highlights are disabled', function()
       local refs = {
         { range = { start = { line = 0, character = 0 }, ['end'] = { line = 0, character = 5 } } },
       }
-      state.set(refs, nil, bufnr)
+      highlight.enable(refs, bufnr)
+      -- First disable flips flag to false
+      highlight.disable()
+      -- Second disable clears highlights
+      highlight.disable()
 
-      assert.is_false(state.is_active(bufnr))
-    end)
-
-    it('returns false when references is empty', function()
-      state.set({}, 1, bufnr)
-
-      assert.is_false(state.is_active(bufnr))
+      assert.is_false(state.is_active())
     end)
   end)
 
@@ -115,7 +119,6 @@ describe('refjump.state', function()
       local info = state.get_reference_info(bufnr)
       assert.is_nil(info.index)
       assert.equals(0, info.total)
-      assert.is_false(state.is_active(bufnr))
     end)
   end)
 
@@ -159,8 +162,15 @@ describe('refjump.state', function()
 
       state.clear(bufnr)
 
-      assert.is_false(state.is_active(bufnr))
-      assert.is_true(state.is_active(bufnr2))
+      -- State data for bufnr should be cleared
+      local info1 = state.get_reference_info(bufnr)
+      assert.is_nil(info1.index)
+      assert.equals(0, info1.total)
+
+      -- State data for bufnr2 should still exist
+      local info2 = state.get_reference_info(bufnr2)
+      assert.equals(1, info2.index)
+      assert.equals(1, info2.total)
 
       -- Cleanup
       vim.api.nvim_buf_delete(bufnr2, { force = true })
